@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,7 +16,7 @@ import androidx.compose.ui.unit.sp
 
 //remember -> persist the state on recomposition
 ////rememberSaveable -> persist even on configuration changes
-@Composable
+/*@Composable
 fun StateTestScreen(){
     var name by rememberSaveable{
         mutableStateOf("")
@@ -28,6 +29,20 @@ fun StateTestScreen(){
           name=it
       })
   }
+}*/
+
+@Composable
+fun StateTestScreen(viewModel: StateTestViewModel){
+    val name by viewModel.name.observeAsState(initial = "")
+
+    Column(modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally){
+        MyText(name)
+        MyTextField(name, onNameChange = {
+            viewModel.onNameUpdate(it)
+        })
+    }
 }
 
 @Composable
@@ -47,9 +62,5 @@ fun MyTextField(name:String,onNameChange: (String)->Unit){
         label = { Text(text = "Enter name")})
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewStateTestScreen(){
-   StateTestScreen()
-}
+
 
