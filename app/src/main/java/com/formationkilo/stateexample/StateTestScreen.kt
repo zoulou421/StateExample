@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 
 //remember -> persist the state on recomposition
 ////rememberSaveable -> persist even on configuration changes
+//ViewModel and LiveData ->Hoist the state for re-usability
 /*@Composable
 fun StateTestScreen(){
     var name by rememberSaveable{
@@ -35,12 +36,18 @@ fun StateTestScreen(){
 fun StateTestScreen(viewModel: StateTestViewModel){
     val name by viewModel.name.observeAsState(initial = "")
 
+    val surname by viewModel.surname.observeAsState(initial = "")
+
     Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally){
-        MyText(name)
+        MyText("$name $surname")
         MyTextField(name, onNameChange = {
             viewModel.onNameUpdate(it)
+        })
+
+        MyTextField(surname, onNameChange = {
+            viewModel.onSurnameUpdate(it)
         })
     }
 }
